@@ -3,6 +3,8 @@ import config from './src/config/env.js';
 import connectDB from './src/config/db.js';
 import dotenv from 'dotenv';
 
+import apiRoute from './src/routes/index.js'
+
 dotenv.config();
 
 const requiredEnvVars = [
@@ -15,6 +17,9 @@ const requiredEnvVars = [
 const app = express();
 
 app.use(express.json());
+
+//Routes
+app.use('/api',apiRoute);
 
 app.get("/",(req,res)=>{
     console.log("server start");
