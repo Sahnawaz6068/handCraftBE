@@ -11,3 +11,8 @@ export default {
     getProduct,
     getProduct2
 }
+
+
+//sucess respons 
+// error response 
+//App error

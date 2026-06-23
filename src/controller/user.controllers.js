@@ -1,23 +1,29 @@
 import User from "../Model/user.model.js";
+import response from "../utils/responsebody.js";
 
-const createUser =  async (req,res)=>{
-    try{
-        const user =await User.create(req.body);
-        return res.status(200).json({
-            success:true,
-            error:{},
-            data:user,
-            message:"sucessfully created a new User"
-        })
-    }catch(e){
-        console.log(e);
-        return res.status(500).json({
-            success:false,
-            error:e,
-            data:{},
-            message:"Something went wrong"
-        })
+const createUser = async (req, res) => {
+    try {
+        const user = await User.create(req.body);
+
+        const successResponse = {
+            ...response.successResponseBody
+        };
+
+        successResponse.data = user;
+        successResponse.message = "Successfully created a new user";
+
+        return res.status(201).json(successResponse);
+
+    } catch (e) {
+
+        const errorResponse = {
+            ...response.errorResponseBody
+        };
+
+        errorResponse.error = e.message;
+
+        return res.status(500).json(errorResponse);
     }
-}
+};
 
-export default {createUser};
+export default { createUser };
