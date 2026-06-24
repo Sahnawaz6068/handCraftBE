@@ -6,8 +6,8 @@ class crudRepository {
     }
 
 
-    async create (date){
-        return this.model.create(date);
+    async create (data){
+        return this.model.create(data);
     }
 
     async read (id) {
