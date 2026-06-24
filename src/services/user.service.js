@@ -12,6 +12,16 @@ async function createUser(data) {
     }
 }
 
+async function alluser(params) {
+    try{
+        const user = await userRepository.readAll();
+        return user;
+    }catch(err){
+        throw err
+    }
+}
+
 export default {
-    createUser
+    createUser,
+    alluser
 }

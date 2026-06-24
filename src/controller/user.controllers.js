@@ -27,31 +27,48 @@ import userService from "../services/user.service.js";
 //     }
 // };
 
-const createUser = async (req,res)=>{
-    const data = req.body;
-    try{
-        const user = await userService.createUser(data);
+const createUser = async (req, res) => {
+  const data = req.body;
+  try {
+    const user = await userService.createUser(data);
 
-        const successResponse = {
-            ...response.successResponseBody
-        }
+    const successResponse = {
+      ...response.successResponseBody,
+    };
 
-        successResponse.data= user;
-        successResponse.message = "User create sucessfully";
+    successResponse.data = user;
+    successResponse.message = "User create sucessfully";
 
-        return res.status(200).json({
-            successResponse
-        })
-        
-    }catch(err){
-        const errorResponse = {
-            ...response.errorResponseBody
-        }
+    return res.status(200).json({
+      successResponse,
+    });
+  } catch (err) {
+    const errorResponse = {
+      ...response.errorResponseBody,
+    };
 
-        errorResponse.message = err.message;
+    errorResponse.message = err.message;
 
-        return res.status(500).json({errorResponse});
-    }
-}
+    return res.status(500).json({ errorResponse });
+  }
+};
 
-export default { createUser };
+const getAllUser = async (req, res) => {
+  try {
+    const allUser =  await userService.alluser();
+
+    return res.status(200).json({
+        allUser
+    })
+  } catch (err) {
+    const errorResponse = {
+      ...response.errorResponseBody,
+    };
+
+    errorResponse.message = err.message;
+
+    return res.status(500).json({ errorResponse });
+  }
+};
+
+export default { createUser,getAllUser };
