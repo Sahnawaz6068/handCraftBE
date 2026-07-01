@@ -1,10 +1,8 @@
 
-
 class crudRepository {
     constructor(model) {
         this.model = model;
     }
-
 
     async create (data){
         return this.model.create(data);
@@ -23,8 +21,8 @@ class crudRepository {
             id,
             data,
             {
-                new:true,
-                runValidators: true
+                new:true,   // It return updated content not the previous content
+                runValidators: true //Run the validator also 
             }
         )
     }

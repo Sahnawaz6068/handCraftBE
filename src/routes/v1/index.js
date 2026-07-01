@@ -5,7 +5,7 @@ import user from './user.routes.js'
 
 const router = express.Router();
 
-router.use('/product',product);
+router.use('/products',product);
 router.use('/user',user);
 
 export default router;

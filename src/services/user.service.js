@@ -1,27 +1,36 @@
-
 import UserRepository from "../repositories/userRepository.js";
 
-const userRepository =  new UserRepository();
+const userRepository = new UserRepository();
 
 async function createUser(data) {
-    try{
-        const user = await userRepository.create(data);
-        return user;
-    }catch(err){
-        throw err
-    }
+  try {
+    const user = await userRepository.create(data);
+    return user;
+  } catch (err) {
+    throw err;
+  }
+}
+
+async function getUser(id) {
+  try {
+    const user = await userRepository.read(id);
+    return user;
+  } catch (error) {
+    throw error;
+  }
 }
 
 async function alluser(params) {
-    try{
-        const user = await userRepository.readAll();
-        return user;
-    }catch(err){
-        throw err
-    }
+  try {
+    const user = await userRepository.readAll();
+    return user;
+  } catch (err) {
+    throw err;
+  }
 }
 
 export default {
-    createUser,
-    alluser
-}
+  createUser,
+  alluser,
+  getUser
+};

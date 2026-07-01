@@ -1,6 +1,6 @@
-import User from "../Model/user.model.js";
 import response from "../utils/responsebody.js";
 import userService from "../services/user.service.js";
+import { StatusCodes } from "http-status-codes";
 
 // const createUser = async (req, res) => {
 //     try {
@@ -71,4 +71,30 @@ const getAllUser = async (req, res) => {
   }
 };
 
-export default { createUser,getAllUser };
+const getUser  = async (req, res)=> {
+  try {
+    const user =  await userService.getUser(req.params.id);
+
+    const successResponse  =  {
+      ...response.successResponseBody
+    }
+    successResponse.data = user;
+    successResponse.message =  `This is the user details for the userId ${req.params.id}`
+
+    res.status(StatusCodes.OK).json({
+      successResponse
+    })
+  } catch (error) {
+    const errorResponse = {
+      ...response.errorResponseBody
+    }
+
+    errorResponse.message = error.message;
+
+    res.status(StatusCodes.BAD_REQUEST).json({
+      errorResponse
+    })
+  }
+}
+
+export default { createUser,getAllUser,getUser };

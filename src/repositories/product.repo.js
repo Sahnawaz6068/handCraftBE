@@ -3,7 +3,7 @@ import crudRepository from "./crud.js";
 
 class productRepository extends crudRepository {
     constructor(){
-        super();
+        super(Product);
     }
 }
 
