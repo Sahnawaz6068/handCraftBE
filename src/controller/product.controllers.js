@@ -136,12 +136,40 @@ async function updateProductById(req, res) {
   }
 }
 
+async function getProducts(req, res) {
+  try {
+    const result = await productService.getProducts(req.query);
+
+    const successResponse = {
+      ...responsebody.successResponseBody,
+    };
+
+    successResponse.data = result;
+    successResponse.message = "This is the result for the pagination";
+
+    res.status(StatusCodes.OK).json({
+      successResponse,
+    });
+  } catch (error) {
+    const errorResponse = {
+      ...responsebody.errorResponseBody,
+    };
+
+    errorResponse.message = error.message;
+
+    res.status(StatusCodes.BAD_REQUEST).json({
+      errorResponse,
+    });
+  }
+}
+
 export default {
   createProduct,
   getProductById,
   getAllProduct,
   deleteProductById,
   updateProductById,
+  getProducts
 };
 
 //sucess respons
