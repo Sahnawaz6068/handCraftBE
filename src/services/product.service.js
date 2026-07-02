@@ -48,7 +48,7 @@ async function updateProduct(id, data) {
 }
 
 async function getProducts(queryParams) {
-    const { page = 1, limit = 12, search } = queryParams;
+    const { page = 1, limit =12, search } = queryParams;
 
     const pageNumber = Math.max(1, Number(page));
     const pageLimit = Math.min(50, Math.max(1, Number(limit)));
