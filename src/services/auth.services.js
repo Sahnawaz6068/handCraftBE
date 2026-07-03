@@ -1,5 +1,6 @@
 import User from "../Model/user.model.js";
 import bcrypt from "bcrypt";
+import { generateAccessToken, generateRefreshToken } from "../utils/jwt.js";
 
 async function registerUser(data) {
   try {
@@ -25,7 +26,56 @@ async function getUserDetail(id) {
   }
 }
 
+async function signIn(data) {
+  const { identifier, password } = data;
+
+  const user = await User.findOne({
+    $or: [{ email: identifier }, { phone: identifier }],
+  }).select("+password");
+
+  console.log(user);
+  if (!user) {
+    throw new Error("Invalid credentials");
+  }
+
+  if (!user.isActive) {
+    throw new Error("Account has been disabled");
+  }
+
+  if (!user.isVerified) {
+    throw new Error("Please verify your account");
+  }
+
+  const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordCorrect) {
+    throw new Error("Invalid credentials");
+  }
+
+  const accessToken = generateAccessToken({
+    id: user._id,
+    role: user.role,
+  });
+
+  const refreshToken = generateRefreshToken({
+    id: user._id,
+  });
+
+  user.lastLoginAt = new Date();
+
+  await user.save();
+
+  user.password = undefined;
+
+  return {
+    user,
+    accessToken,
+    refreshToken,
+  };
+}
+
 export default {
   registerUser,
   getUserDetail,
+  signIn
 };
