@@ -83,6 +83,7 @@ async function signin(req, res) {
       successResponse,
     });
   } catch (error) {
+    console.log(error)
     const errorResponse = {
       ...responsebody.errorResponseBody,
     };

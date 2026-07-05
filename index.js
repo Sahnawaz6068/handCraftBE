@@ -2,6 +2,8 @@ import express from 'express';
 import config from './src/config/env.js';
 import connectDB from './src/config/db.js';
 import dotenv from 'dotenv';
+import cookieParser from "cookie-parser";
+
 
 import apiRoute from './src/routes/index.js'
 
@@ -17,6 +19,8 @@ const requiredEnvVars = [
 const app = express();
 
 app.use(express.json());
+// app.use(cookieParser());
+
 
 //Routes
 app.use('/api',apiRoute);
