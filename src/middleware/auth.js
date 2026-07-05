@@ -18,8 +18,9 @@ function auth(req, res, next) {
   const token = authHeader.split(" ")[1];
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // { id, role, iat, exp }
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
+    console.log(decoded);
+    req.user = decoded;
     next();
   } catch (err) {
     const errorResponse = {

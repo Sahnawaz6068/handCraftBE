@@ -9,7 +9,7 @@ async function create(userId) {
 }
 
 async function save(cart){
-    return Cart.save();
+    return cart.save();
 }
 
 export default {

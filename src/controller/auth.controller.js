@@ -78,12 +78,12 @@ async function signin(req, res) {
     };
 
     successResponse.message = "User signed in successfully";
+    console.log(successResponse)
 
     return res.status(StatusCodes.OK).json({
       successResponse,
     });
   } catch (error) {
-    console.log(error)
     const errorResponse = {
       ...responsebody.errorResponseBody,
     };

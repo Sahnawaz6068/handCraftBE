@@ -1,31 +1,53 @@
 import cartRepo from "../repositories/cartRepo.js";
-import productRepository from "../repositories/product.repo.js";
+import ProductRepository from "../repositories/product.repo.js";
 
-const ProductRepo = new productRepository();
+const productRepo = new ProductRepository();
 
 async function getOrCreateCart(userId) {
   let cart = await cartRepo.findByUserId(userId);
+
   if (!cart) {
     cart = await cartRepo.create(userId);
   }
+
+  return cart;
 }
 
 async function addItem(userId, { productId, quantity = 1 }) {
-  const product = await ProductRepo.read(productId);
+  quantity = Number(quantity);
+
+  if (!Number.isInteger(quantity) || quantity <= 0) {
+    throw new Error("Quantity must be greater than 0");
+  }
+
+  const product = await productRepo.read(productId);
+
   if (!product) {
     throw new Error("Product not found");
   }
-  if (product.status !== "active") throw new Error("Product is not available");
+
+  if (product.status !== "active") {
+    throw new Error("Product is not available");
+  }
+
+  if (product.stock < quantity) {
+    throw new Error("Insufficient stock");
+  }
 
   const cart = await getOrCreateCart(userId);
+
   const existingItem = cart.items.find(
-    (item) => item.productId.toString() === productId,
+    (item) => item.productId.toString() === productId
   );
 
   if (existingItem) {
+    if (existingItem.quantity + quantity > product.stock) {
+      throw new Error("Quantity exceeds available stock");
+    }
+
     existingItem.quantity += quantity;
   } else {
-    cart.itmes.push({
+    cart.items.push({
       productId: product._id,
       vendorId: product.vendorId,
       quantity,
@@ -39,41 +61,79 @@ async function addItem(userId, { productId, quantity = 1 }) {
 }
 
 async function updateItemQuantity(userId, productId, quantity) {
-  const cart = await CartRepo.findByUserId(userId);
-  if (!cart) throw new Error("Cart not found");
+  quantity = Number(quantity);
+
+  const cart = await cartRepo.findByUserId(userId);
+
+  if (!cart) {
+    throw new Error("Cart not found");
+  }
 
   const item = cart.items.find(
-    (item) => item.productId.toString() === productId,
+    (item) => item.productId.toString() === productId
   );
-  if (!item) throw new Error("Item not in cart");
+
+  if (!item) {
+    throw new Error("Item not found in cart");
+  }
 
   if (quantity <= 0) {
     cart.items = cart.items.filter(
-      (item) => item.productId.toString() !== productId,
+      (item) => item.productId.toString() !== productId
     );
   } else {
+    const product = await productRepo.read(productId);
+
+    if (!product) {
+      throw new Error("Product not found");
+    }
+
+    if (quantity > product.stock) {
+      throw new Error("Quantity exceeds available stock");
+    }
+
     item.quantity = quantity;
   }
 
-  await CartRepo.save(cart);
+  await cartRepo.save(cart);
+
   return cart;
 }
 
 async function removeItem(userId, productId) {
-  const cart = await CartRepo.findByUserId(userId);
-  if (!cart) throw new Error("Cart not found");
+  const cart = await cartRepo.findByUserId(userId);
 
-  cart.items = cart.items.filter((item) => item.productId.toString() !== productId);
-  await CartRepo.save(cart);
+  if (!cart) {
+    throw new Error("Cart not found");
+  }
+
+  cart.items = cart.items.filter(
+    (item) => item.productId.toString() !== productId
+  );
+
+  await cartRepo.save(cart);
+
   return cart;
 }
 
 async function clearCart(userId) {
-  const cart = await CartRepo.findByUserId(userId);
-  if (!cart) return null;
+  const cart = await cartRepo.findByUserId(userId);
+
+  if (!cart) {
+    throw new Error("Cart not found");
+  }
+
   cart.items = [];
-  await CartRepo.save(cart);
+
+  await cartRepo.save(cart);
+
   return cart;
 }
 
-export default { getOrCreateCart, addItem, updateItemQuantity, removeItem, clearCart };
+export default {
+  getOrCreateCart,
+  addItem,
+  updateItemQuantity,
+  removeItem,
+  clearCart,
+};

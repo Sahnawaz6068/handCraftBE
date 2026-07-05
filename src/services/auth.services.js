@@ -33,7 +33,6 @@ async function signIn(data) {
     $or: [{ email: identifier }, { phone: identifier }],
   }).select("+password");
 
-  console.log(user);
   if (!user) {
     throw new Error("Invalid credentials");
   }
