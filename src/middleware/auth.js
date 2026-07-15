@@ -3,12 +3,12 @@ import responsebody from "../utils/responsebody.js";
 
 function auth(req, res, next) {
   const authHeader = req.headers.authorization;
-
+  console.log(req.headers.authorization);
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     const errorResponse = {
       ...responsebody.errorResponseBody,
     };
-    errorResponse.message = "No token provided";
+    errorResponse.message = "No token provided..";
 
     return res.status(401).json({
       errorResponse,
@@ -23,13 +23,12 @@ function auth(req, res, next) {
     req.user = decoded;
     next();
   } catch (err) {
-    const errorResponse = {
-      ...responsebody.errorResponseBody,
-    };
-    errorResponse.message = "Invalid or expired token";
+    console.log("JWT Error:", err);
 
     return res.status(401).json({
-      errorResponse,
+      errorResponse: {
+        message: err.message,
+      },
     });
   }
 }
