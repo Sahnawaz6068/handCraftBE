@@ -8,7 +8,7 @@ async function createUser(data) {
     return user;
   } catch (err) {
     throw err;
-  }
+  } 
 }
 
 async function getUser(id) {
@@ -28,6 +28,8 @@ async function alluser(params) {
     throw err;
   }
 }
+
+
 
 export default {
   createUser,

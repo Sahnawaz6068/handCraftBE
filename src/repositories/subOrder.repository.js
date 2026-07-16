@@ -1,9 +1,17 @@
-
-
+import crudRepository from "./crud.js";
 import SubOrder from "../Model/subOrder.model.js";
 
-async function createMany(subOrdersData) {
-  return SubOrder.insertMany(subOrdersData);
+class SubOrderRepository extends crudRepository {
+  constructor() {
+    super(SubOrder);
+  }
+
+  async createMany(subOrdersData) {
+    return await this.model.insertMany(subOrdersData);
+  }
 }
 
-export default { createMany };
+export default SubOrderRepository;
+
+// I want the specifica all the subOrder means ==> for the vendor id this all the 
+//suborder || not the whole suborder
