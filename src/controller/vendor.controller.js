@@ -30,6 +30,30 @@ async function AllSubOrder(req,res) {
   }
 }
 
+async function AllSubOrders(req,res) {
+  try {
+    const subOrders = await vendor.getAllSuborders(req.params.id);
+    const sucessResponse = {
+      ...responsebody.successResponseBody,
+    };
+    sucessResponse.data = subOrders;
+    sucessResponse.success = true;
+    sucessResponse.message = "All the suborders for you";
+
+    res.status(StatusCodes.OK).json({
+      sucessResponse,
+    });
+  } catch (err) {
+    const errorResponse = {
+      ...responsebody.errorResponseBody,
+    };
+
+    errorResponse.message = err.message;
+
+    res.status(500).json({ errorResponse });
+  }
+}
+
 async function updateOrderStatus(req,res) {
   try {
     const updateSuborder = await vendor.getSubOrderAndUpdate(
@@ -85,5 +109,6 @@ async function deleteSubOrder(req,res) {
 export default {
   AllSubOrder,
   updateOrderStatus,
-  deleteSubOrder
+  deleteSubOrder,
+  AllSubOrders
 };

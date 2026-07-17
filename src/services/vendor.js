@@ -1,3 +1,4 @@
+import User from "../Model/user.model.js";
 import SubOrderRepository from "../repositories/subOrder.repository.js";
 
 const subOrderRepository = new SubOrderRepository();
@@ -21,6 +22,20 @@ async function getAllSuborder() {
 //         throw error
 //     }
 // }
+
+async function getAllSuborders(id) {
+  try {
+      const venderExist = await User.findOne({_id:id,role:"vender"});
+      if(!venderExist){
+        throw new Error ("Vender for this id does not exist");
+      }
+      const allSuborder = await subOrderRepository.getSubOrderByVendorId(id);
+     
+      return allSuborder;
+  } catch (error) {
+    throw error;
+  }
+}
 
 async function getSubOrderAndUpdate(id, data) {
   try {
@@ -71,8 +86,10 @@ async function deleteSubOrder(id) {
   }
 }
 
+
 export default {
   getAllSuborder,
   deleteSubOrder,
-  getSubOrderAndUpdate
+  getSubOrderAndUpdate,
+  getAllSuborders
 };
