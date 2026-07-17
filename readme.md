@@ -1,4 +1,173 @@
-# Handcraft Backend
+# HandCraft — Backend API
+
+Backend API for HandCraft, a multi-vendor handmade jewelry marketplace. This project provides the server-side implementation (Node.js + Express + MongoDB) with an MVC + Service Layer architecture, JWT-based authentication, role-based access control, and core modules for products, cart, and users.
+
+> Note: This repository contains an existing lowercase `readme.md` with implementation notes and a checklist. This README is a polished, user-facing overview and quick start.
+
+## Key information
+
+- Language & runtime: Node.js (ES modules)
+- Framework: Express
+- Database: MongoDB (Mongoose)
+- Auth: JSON Web Tokens (JWT) with cookie-based access/refresh pattern
+- Validation: Joi (planned)
+- Logging & security: Helmet, CORS, express-mongo-sanitize (patterns used/planned)
+
+## Table of contents
+
+- Features
+- Project structure
+- Getting started
+- Environment variables
+- Available scripts
+- API overview
+- Implemented modules and TODOs
+- Contributing
+- License
+
+## Features
+
+- User authentication: signup, signin, refresh token, logout (cookie-based tokens)
+- Role-based access control: customer, vendor, admin
+- Product module: vendor-scoped CRUD, search & filtering, pagination
+- Cart module: add/update/remove items, price snapshot at add-time
+- Standardized API response shapes
+
+## Project structure
+
+```
+src/
+├── config/         # DB connection, env validation, logger
+├── models/         # Mongoose schemas (User, Product, Order, Vendor)
+├── controllers/    # HTTP request/response handling only
+├── services/       # Business logic
+├── routes/         # Route definitions per module
+├── middlewares/    # auth, role-based access, error handling, validation
+├── utils/          # ApiError, ApiResponse, asyncHandler
+├── validators/     # Joi schemas (planned)
+index.js             # Entry point (root)
+```
+
+## Getting started (local)
+
+Prerequisites:
+- Node.js (v18+ recommended)
+- MongoDB running locally or accessible via URI
+
+1. Clone the repository
+
+```bash
+git clone https://github.com/Sahnawaz6068/handCraftBE.git
+cd handCraftBE
+```
+
+2. Install dependencies
+
+```bash
+npm install
+```
+
+3. Create a `.env` file in the project root with the necessary variables (example below)
+
+4. Run the server in development
+
+```bash
+npm run dev
+```
+
+The default entry point is `index.js`.
+
+## Environment variables
+
+Create a `.env` file at the project root. Example variables used by the app:
+
+```
+PORT=3000
+MONGO_URI=mongodb://localhost:27017/handcraft
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=7d
+CLIENT_URL=http://localhost:3000
+```
+
+Adjust values to match your environment and secrets management policy.
+
+## Available scripts
+
+From package.json:
+
+- `npm run dev` — start with nodemon (development)
+- `npm test` — placeholder: currently prints an error (no tests configured)
+
+Add/adjust scripts as CI or deployment needs evolve (e.g., `start`, `lint`, `build`, `test`).
+
+## API overview (high level)
+
+Auth endpoints (examples):
+- POST `/auth/signup` — register a new user (customer/vendor)
+- POST `/auth/signin` — login and receive tokens (cookies)
+- POST `/auth/refresh-token` — rotate/refresh access token (requires refresh cookie)
+- POST `/auth/logout` — clear tokens
+
+Products (examples):
+- POST `/products` — create product (vendor)
+- GET `/products` — list products with filters (public)
+- GET `/products/:id` — get single product (public)
+- PATCH `/products/:id` — update product (vendor only)
+- DELETE `/products/:id` — delete product (vendor only)
+
+Cart (examples):
+- GET `/cart` — get current cart (buyer)
+- POST `/cart/items` — add item to cart (buyer)
+- PATCH `/cart/items/:productId` — update item quantity
+- DELETE `/cart/items/:productId` — remove item from cart
+
+Refer to the code in `src/routes` and `src/controllers` for complete route lists and request/response shapes.
+
+## Implemented modules & current roadmap
+
+Implemented / verified:
+- Project structure (MVC + Service Layer)
+- DB connection with retry/fail-fast logic
+- Auth module (signup/signin, cookie-based JWT access + refresh tokens)
+- Role-based access middleware (`restrictTo`)
+- Standardized API response format (`successResponse` / `errorResponse` patterns)
+- Product module (CRUD scoped to vendor)
+- Product search & filter (category, price range, text search, pagination)
+- Cart module (add/update/remove items, price snapshot at add-time)
+
+Planned / TODO (non-exhaustive):
+- Centralized Express error-handling middleware (to replace repetitive try/catch)
+- Refresh token rotation + secure logout / token invalidation
+- Vendor onboarding + admin approval flow
+- Checkout flow (Order + SubOrder creation, payment integration)
+- Payment integration (e.g., Razorpay)
+- Atomic stock decrement and transaction safety for checkout
+- Reviews & ratings, vendor dashboard, admin analytics
+
+## Contributing
+
+- For small fixes or docs improvements, open an issue or a PR with a clear description.
+- For code changes: follow the existing project style, run local smoke tests, and describe migration or environment changes in the PR.
+
+If you'd like, an initial contributor checklist or guidelines can be added to simplify onboarding.
+
+## Notes
+
+- There is an existing `readme.md` file in the repository with implementation notes and a checklist. This README aims to be a polished, user-facing entry point while the existing file remains as an internal tracker.
+
+## License
+
+Private — portfolio/freelance project. Not open source.
+
+---
+
+If you'd like, the README can be extended with:
+- Detailed API reference (OpenAPI / Postman collection)
+- Environment-specific setup (Docker, Docker Compose)
+- Testing & CI guidelines
+- Deployment steps (Heroku / VPS / Docker)
+
+If that sounds helpful, say which sections to expand and any preferences (e.g., include Docker, OpenAPI, or examples).
  
 Multi-vendor handmade jewelry marketplace — backend API built with Node.js, Express, and MongoDB, following an MVC + Service Layer architecture.
  
