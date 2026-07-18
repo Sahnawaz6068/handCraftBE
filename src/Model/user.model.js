@@ -58,7 +58,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-
+    venderProfile: {
+      shopName: { type: String, trim: true },
+      description: { type: String, trim: true },
+      logo: { type: String, default: null },
+      isApproved: { type: Boolean, default: false },
+    },
     lastLoginAt: {
       type: Date,
     },

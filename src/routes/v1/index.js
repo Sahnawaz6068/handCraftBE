@@ -4,13 +4,13 @@ import product from './product.routes.js'
 import user from './auth.routes.js'
 import cart from './cart.routes.js'
 import order from './order.routes.js'
-import suborder from './vendor.route.js';
+import suborder from './suborder.route.js';
 const router = express.Router();
 
 router.use('/products',product);
 router.use('/cart',cart)
 router.use('/user',user);
 router.use('/orders',order);
-router.use('/suborder',suborder)
+router.use('/suborder',suborder);
 
 export default router;

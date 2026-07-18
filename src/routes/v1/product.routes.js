@@ -6,8 +6,11 @@ const router = express.Router();
 
 //api/v1/product/
 router.get('/:id',controller.getProductById);
-router.get('/',controller.getProducts);
-router.get('/',controller.getAllProduct);
+router.get('/',controller.getProducts); // pagination query
+router.get('/',controller.getAllProduct); //
+
+
+//This is done by the vender (Autorized by the vender)
 router.post('/',controller.createProduct);
 router.delete('/:id',controller.deleteProductById);
 router.patch('/:id',controller.updateProductById);

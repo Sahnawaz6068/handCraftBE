@@ -3,7 +3,7 @@
 //Vendor profile edit
 
 import { StatusCodes } from "http-status-codes";
-import vendor from "../services/vendor.js";
+import vendor from "../services/suborder.js";
 import responsebody from "../utils/responsebody.js";
 
 async function AllSubOrder(req,res) {
