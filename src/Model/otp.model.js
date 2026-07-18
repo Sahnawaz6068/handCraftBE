@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const otpSchema = new mongoose.Schema({
-    identifire:{
+    identifier:{
         type:String,
         required:true,
         index:true

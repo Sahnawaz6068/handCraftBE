@@ -4,12 +4,12 @@ async function create (data){
     return Otp.create(data);
 }
 
-async function findLatestByIdentifier(identifire,purpose){
-    return Otp.findOne({identifire,purpose}).sort({createdAt: -1 })
+async function findLatestByIdentifier(identifier,purpose){
+    return Otp.findOne({identifier,purpose}).sort({createdAt: -1 })
 }
 
-async function deleteByIdentifier(identifire,purpose){
-    return Otp.deleteMany({identifire,purpose})
+async function deleteByIdentifier(identifier,purpose){
+    return Otp.deleteMany({identifier,purpose})
 }
 
 
