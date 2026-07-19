@@ -25,9 +25,9 @@ async function getAllSuborder() {
 
 async function getAllSuborders(id) {
   try {
-      const venderExist = await User.findOne({_id:id,role:"vender"});
-      if(!venderExist){
-        throw new Error ("Vender for this id does not exist");
+      const vendorExist = await User.findOne({_id:id,role:"vendor"});
+      if(!vendorExist){
+        throw new Error ("Vendor for this id does not exist");
       }
       const allSuborder = await subOrderRepository.getSubOrderByVendorId(id);
      

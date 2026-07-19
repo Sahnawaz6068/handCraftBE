@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["customer", "vender", "admin"],
+      enum: ["customer", "vendor", "admin"],
       default: "customer",
       required: true,
     },
@@ -58,11 +58,12 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
-    venderProfile: {
+    vendorProfile: {
       shopName: { type: String, trim: true },
       description: { type: String, trim: true },
       logo: { type: String, default: null },
       isApproved: { type: Boolean, default: false },
+      approvedAt: { type: Date, default: null }, 
     },
     lastLoginAt: {
       type: Date,

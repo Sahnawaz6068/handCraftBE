@@ -86,7 +86,7 @@ async function verifyEmailOtp(identifier, submittedOtp) {
 
   await otpRepository.deleteByIdentifier(identifier, "email_verification");
 
-  const user = await User.findOne({ email:identifier }); // if you req for otp but the user that not exist in the DB
+  const user = await User.findOne({ email:identifier });
   if (!user) throw new Error("User not found");
 
   user.isVerified = true;

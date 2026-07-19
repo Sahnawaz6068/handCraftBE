@@ -10,7 +10,7 @@ router.get('/',controller.getProducts); // pagination query
 router.get('/',controller.getAllProduct); //
 
 
-//This is done by the vender (Autorized by the vender)
+//This is done by the vendor (Autorized by the vendor)
 router.post('/',controller.createProduct);
 router.delete('/:id',controller.deleteProductById);
 router.patch('/:id',controller.updateProductById);

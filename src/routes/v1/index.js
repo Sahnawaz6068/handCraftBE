@@ -6,6 +6,9 @@ import cart from './cart.routes.js'
 import order from './order.routes.js'
 import suborder from './suborder.route.js';
 import otp from './otp.routes.js'
+import vendor from './vendor.route.js'
+import admin from './admin.routes.js'
+
 const router = express.Router();
 
 router.use('/products',product);
@@ -13,6 +16,8 @@ router.use('/cart',cart)
 router.use('/user',user);
 router.use('/orders',order);
 router.use('/suborder',suborder);
-router.use('/otp',otp)
+router.use('/otp',otp);
+router.use('/vendor',vendor);
+router.use('/admin',admin)
 
 export default router;
