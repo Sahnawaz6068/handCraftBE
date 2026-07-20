@@ -2,7 +2,8 @@ import productRepository from "../repositories/product.repo.js";
 
 const ProductRepo = new productRepository();
 
-async function createProducts(data) {
+async function createProducts(vendorId,data) {
+  data.vendorId=vendorId;
   try {
     const product = await ProductRepo.create(data);
     return product;

@@ -1,4 +1,3 @@
-
 import { StatusCodes } from "http-status-codes";
 import adminService from "../services/admin.service.js";
 import responsebody from "../utils/responsebody.js";
@@ -9,7 +8,8 @@ async function getPendingVendors(req, res) {
 
     const successResponse = { ...responsebody.successResponseBody };
     successResponse.data = pendingVendors;
-    successResponse.message = "Pending vendor applications fetched successfully";
+    successResponse.message =
+      "Pending vendor applications fetched successfully";
 
     res.status(StatusCodes.OK).json({ successResponse });
   } catch (error) {
@@ -39,4 +39,21 @@ async function approveVendor(req, res) {
   }
 }
 
-export default { getPendingVendors, approveVendor };
+async function getAllAprovedVendors(req, res) {
+  try {
+    const vendors = await adminService.getAllAprovedVendors();
+    const successResponse = { ...responsebody.successResponseBody };
+    successResponse.data = vendors;
+    successResponse.message =
+      "All approved vendor applications fetched successfully";
+
+    res.status(StatusCodes.OK).json({ successResponse });
+  } catch (error) {
+    const errorResponse = { ...responsebody.errorResponseBody };
+    errorResponse.message = error.message;
+
+    res.status(StatusCodes.BAD_REQUEST).json({ errorResponse });
+  }
+}
+
+export default { getPendingVendors, approveVendor, getAllAprovedVendors};

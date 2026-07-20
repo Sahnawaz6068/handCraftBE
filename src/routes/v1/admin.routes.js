@@ -6,9 +6,24 @@ import adminController from "../../controller/admin.controller.js";
 
 const router = express.Router();
 
-
 //restrictTo("admin")
-router.get("/vendors/pending", auth, adminController.getPendingVendors);
-router.patch("/vendors/:vendorId/approve", auth, adminController.approveVendor);
+router.get(
+  "/vendors/pending",
+  auth,
+  restrictTo("admin"),
+  adminController.getPendingVendors,
+);
+router.patch(
+  "/vendors/:vendorId/approve",
+  auth,
+  restrictTo("admin"),
+  adminController.approveVendor,
+);
+router.get(
+  "/vendors",
+  auth,
+  restrictTo("admin"),
+  adminController.getAllAprovedVendors,
+); //All approved vendor
 
 export default router;

@@ -7,10 +7,10 @@ const router = express.Router();
 
 router.use(auth, restrictTo("customer"));
 
-router.get("/", cartController.getCart);
-router.post("/items", cartController.addItem);
-router.patch("/items/:productId", cartController.updateItem);
-router.delete("/items/:productId", cartController.removeItem);
-router.delete("/", cartController.clearCart);
+router.get("/",auth,restrictTo('customer'), cartController.getCart);
+router.post("/items",auth,restrictTo('customer'), cartController.addItem);
+router.patch("/items/:productId",auth,restrictTo('customer'), cartController.updateItem);
+router.delete("/items/:productId",auth,restrictTo('customer'), cartController.removeItem);
+router.delete("/",auth,restrictTo('customer'), cartController.clearCart);
 
 export default router; 

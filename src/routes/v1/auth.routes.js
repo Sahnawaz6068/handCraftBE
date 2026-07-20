@@ -6,11 +6,13 @@
 
 import express from "express";
 import authController from "../../controller/auth.controller.js";
+import auth from "../../middleware/auth.js";
+import restrictTo from "../../middleware/role.js";
 
 const router = express.Router();
 
 router.post("/signUp", authController.signUp);
-router.get("/:id", authController.getUserDetails);
+router.get("/:id",auth,restrictTo('customer'), authController.getUserDetails);
 router.post("/signin",authController.signin);
 
 export default router;

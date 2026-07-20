@@ -43,7 +43,24 @@ async function approveVendor(id) {
   return user;
 }
 
+async function getAllAprovedVendors() {
+  const vendors = await User.find({
+    role: "vendor",
+    "vendorProfile.isApproved": true,
+  });
+
+  return vendors
+}
+
 export default {
   approveVendor,
   getPendingVendors,
+  getAllAprovedVendors
 };
+
+
+// Now the admin can do here some thing like they can see the vendor shop and what are the 
+//product listed as well 
+//As we have seprate product API so vendor have access to product api so that it can do crud on the 
+//Product also 
+//TODO -> add in the product api that get product by vendor Id
