@@ -5,7 +5,7 @@ import { sendEmailOtp } from "../utils/notify.js";
 
 const OTP_EXPIRY_MINUTES = 10;
 const MAX_ATTEMPTS = 5;
-const RESEND_COOLDOWN_SECONDS = 60;
+const RESEND_COOLDOWN_SECONDS = 30;
 
 function generateOtp() {
   return otpGenerator.generate(6, {

@@ -12,7 +12,7 @@ import restrictTo from "../../middleware/role.js";
 const router = express.Router();
 
 router.post("/signUp", authController.signUp);
-router.get("/:id",auth,restrictTo('customer'), authController.getUserDetails);
+router.get("/:id",auth, authController.getUserDetails);
 router.post("/signin",authController.signin);
 
 export default router;

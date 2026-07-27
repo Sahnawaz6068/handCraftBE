@@ -83,10 +83,20 @@ Create a `.env` file at the project root. Example variables used by the app:
 
 ```
 PORT=3000
-MONGO_URI=mongodb://localhost:27017/handcraft
-JWT_SECRET=your_jwt_secret
-JWT_EXPIRES_IN=7d
-CLIENT_URL=http://localhost:3000
+MONGO_URI=
+
+
+JWT_ACCESS_SECRET=xxxx
+JWT_REFRESH_SECRET= xxxx
+
+JWT_ACCESS_EXPIRES=7d
+JWT_REFRESH_EXPIRES=7d
+
+EMAIL_USER=handcraft@gmail.com
+
+EMAIL_APP_PASSWORD=xxxxxxxxxxxxxxxx
+
+ADMIN_EMAIL=admin@gmail.com
 ```
 
 Adjust values to match your environment and secrets management policy.
@@ -432,7 +442,8 @@ POST /api/v1/user/signUp
   "email": "alice@example.com",
   "phone": "9876543210",
   "password": "password123",
-  "role": "customer"   // optional
+  "role": "customer" ,  // optional
+  "avtar": "upload a pic"
 }
 ```
 
@@ -469,6 +480,15 @@ Response success (200):
     "success": true
   }
 }
+
+
+
+res.cookie("refreshToken", result.refreshToken, {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "strict",
+  maxAge: 7 * 24 * 60 * 60 * 1000,
+});
 ```
 
 GET /api/v1/user/:id
@@ -479,11 +499,47 @@ Response success (200):
 
 ```json
 {
-  "successResponse": {
-    "data": { /* user object */ },
-    "message": "User Detail",
-    "success": true
-  }
+    "successResponse": {
+        "error": {},
+        "data": {
+            "vendorProfile": {
+                "shopName": "Sahnawaz Jewels",
+                "description": "Handcrafted gold and silver jewelry from artisans in Bihar",
+                "logo": "https://example.com/logo.png",
+                "isApproved": true,
+                "approvedAt": "2026-07-19T06:18:44.145Z"
+            },
+            "_id": "6a464c9c9109392b9701617d",
+            "name": "Zeeshan Khan",
+            "email": "sahnawaz643786@gmail.com",
+            "role": "vendor",
+            "isVerified": true,
+            "isActive": true,
+            "addresses": [
+                {
+                    "lable": "Home",
+                    "line1": "House No. 12",
+                    "line2": "Near Gandhi Chowk",
+                    "city": "Muzaffarpur",
+                    "state": "Bihar",
+                    "pinCode": "842001",
+                    "country": "India",
+                    "isDefault": true,
+                    "_id": "6a464c9c9109392b9701617e"
+                }
+            ],
+            "avtar": "",
+            "createdAt": "2026-07-02T11:33:48.430Z",
+            "updatedAt": "2026-07-19T06:18:44.151Z",
+            "__v": 0,
+            "venderProfile": {
+                "isApproved": false
+            },
+            "lastLoginAt": "2026-07-19T04:52:55.733Z"
+        },
+        "message": "User Detail",
+        "success": true
+    }
 }
 ```
 

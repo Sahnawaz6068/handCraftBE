@@ -1,10 +1,20 @@
 import { StatusCodes } from "http-status-codes";
 import userService from "../services/auth.services.js";
 import responsebody from "../utils/responsebody.js";
+import otpService from "../services/otp.service.js";
 
 async function signUp(req, res) {
   try {
     const user = await userService.registerUser(req.body);
+
+    try {
+      await otpService.sendEmailVerificationOtp(user.email);
+    } catch (error) {
+      console.error(
+        `Failed to send verification OTP to ${user.email}:`,
+        otpError.message,
+      );
+    }
 
     const successResponse = {
       ...responsebody.successResponseBody,
@@ -55,7 +65,7 @@ async function getUserDetails(req, res) {
 
 async function signin(req, res) {
   try {
-    if(!req.body.identifier ||!req.body.password ){
+    if (!req.body.identifier || !req.body.password) {
       throw new Error("Enter your details");
     }
 
@@ -78,7 +88,7 @@ async function signin(req, res) {
     };
 
     successResponse.message = "User signed in successfully";
-    console.log(successResponse)
+    console.log(successResponse);
 
     return res.status(StatusCodes.OK).json({
       successResponse,
@@ -98,5 +108,5 @@ async function signin(req, res) {
 export default {
   signUp,
   getUserDetails,
-  signin
+  signin,
 };

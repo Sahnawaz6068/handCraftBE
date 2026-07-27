@@ -1,0 +1,15 @@
+PORT=3000
+MONGO_URI=
+
+
+JWT_ACCESS_SECRET=xxxx
+JWT_REFRESH_SECRET=xxxxxxxxxxx
+
+JWT_ACCESS_EXPIRES=xx
+JWT_REFRESH_EXPIRES=xx
+
+EMAIL_USER=handcraft@gmail.cm
+
+EMAIL_APP_PASSWORD=xxxxxxxxxxxxx
+
+ADMIN_EMAIL=admin@gmail.com
