@@ -53,6 +53,33 @@ async function getProductById(req, res) {
   }
 }
 
+async function getProductBySlug(req, res) {
+  try {
+    const product = await productService.productBySlug(req.params.slug);
+
+    const successResponse = {
+      ...responsebody.successResponseBody,
+    };
+
+    successResponse.data = product;
+    successResponse.message = `Product detail for the slug ${req.params.slug}`;
+
+    res.status(StatusCodes.OK).json({
+      successResponse,
+    });
+  } catch (error) {
+    const errorResponse = {
+      ...responsebody.errorResponseBody,
+    };
+
+    errorResponse.message = error.message;
+
+    res.status(StatusCodes.BAD_REQUEST).json({
+      errorResponse,
+    });
+  }
+}
+
 async function getAllProduct(req, res) {
   try {
     const products = await productService.getAllProduct();
@@ -169,7 +196,8 @@ export default {
   getAllProduct,
   deleteProductById,
   updateProductById,
-  getProducts
+  getProducts,
+  getProductBySlug
 };
 
 //sucess respons

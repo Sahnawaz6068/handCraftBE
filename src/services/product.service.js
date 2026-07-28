@@ -1,3 +1,4 @@
+import Product from "../Model/product.model.js";
 import productRepository from "../repositories/product.repo.js";
 
 const ProductRepo = new productRepository();
@@ -15,6 +16,15 @@ async function createProducts(vendorId,data) {
 async function productById(id) {
   try {
     const product = await ProductRepo.read(id);
+    return product;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function productBySlug(slug) {
+  try {
+    const product = await Product.findOne({slug})
     return product;
   } catch (error) {
     throw error;
@@ -89,4 +99,5 @@ export default {
   deleteProduct,
   updateProduct,
   getProducts,
+  productBySlug
 };

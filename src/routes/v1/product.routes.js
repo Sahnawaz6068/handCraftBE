@@ -10,6 +10,7 @@ const router = express.Router();
 router.get("/:id", controller.getProductById);
 router.get("/", controller.getProducts); // pagination query
 router.get("/", controller.getAllProduct); //
+router.get("/slug/:slug", controller.getProductBySlug);
 
 //This is done by the vendor (Autorized by the vendor)
 router.post("/", auth, restrictTo("vendor"), controller.createProduct);
