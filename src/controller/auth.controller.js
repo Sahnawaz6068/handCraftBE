@@ -47,7 +47,7 @@ async function getUserDetails(req, res) {
     successResponse.data = userDetail;
     successResponse.message = "User Detail";
 
-    res.status(StatusCodes.CREATED).json({
+    res.status(StatusCodes.OK).json({
       successResponse,
     });
   } catch (error) {

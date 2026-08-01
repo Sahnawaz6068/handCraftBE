@@ -4,7 +4,7 @@ import responsebody from "../utils/responsebody.js";
 
 async function createProduct(req, res, next) {
   try {
-    const respons = await productService.createProducts(req.body);
+    const respons = await productService.createProducts(req.user.id,req.body);
     const successResponse = {
       ...responsebody.successResponseBody,
     };

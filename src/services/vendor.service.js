@@ -1,4 +1,6 @@
+import Product from "../Model/product.model.js";
 import User from "../Model/user.model.js";
+import productRepository from "../repositories/product.repo.js";
 import UserRepository from "../repositories/userRepository.js";
 import { sendEmailNewVendorApplication } from "../utils/notify.js";
 
@@ -25,12 +27,12 @@ async function applyForVendor(userId, vendorDetail) {
   };
 
   await sendEmailNewVendorApplication({
-  recipients: process.env.ADMIN_EMAIL,
-  applicantName: user.name,
-  applicantEmail: user.email,
-  shopName: vendorDetail.shopName,
-  description: vendorDetail.description,
-});
+    recipients: process.env.ADMIN_EMAIL,
+    applicantName: user.name,
+    applicantEmail: user.email,
+    shopName: vendorDetail.shopName,
+    description: vendorDetail.description,
+  });
 
   await user.save();
 
@@ -50,7 +52,28 @@ async function getVendorProfile(userId) {
   return user;
 }
 
+async function getVendorProducts(userId) {
+  const user = await userRepository.read(userId);
+
+  if (!user) {
+    throw new Error("User not found");
+  }
+
+  if (user.role !== "vendor") {
+    throw new Error("Only vendors can access this resource");
+  }
+
+  if (!user.vendorProfile?.isApproved) {
+    throw new Error("Your vendor application is still pending approval");
+  }
+
+  const products = await Product.find({ vendorId: userId });
+
+  return products;
+}
+
 export default {
   applyForVendor,
   getVendorProfile,
+  getVendorProducts
 };

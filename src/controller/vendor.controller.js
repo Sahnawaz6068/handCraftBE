@@ -2,7 +2,7 @@ import { StatusCodes } from "http-status-codes";
 import vendorService from "../services/vendor.service.js";
 import responsebody from "../utils/responsebody.js";
 
-async function applyForVendor(req,res) {
+async function applyForVendor(req, res) {
   try {
     const { shopName, description, logo } = req.body;
     const user = await vendorService.applyForVendor(req.user.id, {
@@ -39,8 +39,24 @@ async function getMyProfile(req, res) {
   }
 }
 
+async function getProducts(req, res) {
+  try {
+    const product = await vendorService.getVendorProducts(req.user.id);
+
+    const successResponse = { ...responsebody.successResponseBody };
+    successResponse.data = product;
+    successResponse.message = "Vendor products fetched successfully";
+
+    res.status(StatusCodes.OK).json({ successResponse });
+  } catch (error) {
+    const errorResponse = { ...responsebody.errorResponseBody };
+    errorResponse.message = error.message;
+    res.status(StatusCodes.BAD_REQUEST).json({ errorResponse });
+  }
+}
 
 export default {
-    applyForVendor,
-    getMyProfile
-}
+  applyForVendor,
+  getMyProfile,
+  getProducts,
+};

@@ -14,6 +14,8 @@ const router = express.Router();
 router.post('/apply',auth,restrictTo("customer"),vendorController.applyForVendor);
 router.get('/profile',auth,restrictTo("vendor"),vendorController.getMyProfile);
 // router.patch('/:id',);
+//Adding here get product by vendor detail
+router.get('/products',auth,restrictTo("vendor"),vendorController.getProducts);
 
 //admin do operation to vendor account
 // router.get('/vendor/pending',);
