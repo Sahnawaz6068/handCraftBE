@@ -14,6 +14,7 @@ const router = express.Router();
 router.post("/signUp", authController.signUp);
 router.get("/:id",auth, authController.getUserDetails);
 router.post("/signin",authController.signin);
+router.patch("/:id", auth, authController.updateUserDetails);
 
 export default router;
  

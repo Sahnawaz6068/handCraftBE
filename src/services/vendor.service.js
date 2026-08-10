@@ -3,6 +3,8 @@ import User from "../Model/user.model.js";
 import productRepository from "../repositories/product.repo.js";
 import UserRepository from "../repositories/userRepository.js";
 import { sendEmailNewVendorApplication } from "../utils/notify.js";
+import { generateAccessToken } from "../utils/jwt.js";
+import jwt from "jsonwebtoken";
 
 const userRepository = new UserRepository();
 
@@ -36,7 +38,13 @@ async function applyForVendor(userId, vendorDetail) {
 
   await user.save();
 
-  return user;
+  const accessToken = generateAccessToken({
+    id: user._id,
+    email: user.email,
+    role: user.role,
+  });
+
+  return { user, accessToken };
 }
 
 async function getVendorProfile(userId) {
@@ -75,5 +83,5 @@ async function getVendorProducts(userId) {
 export default {
   applyForVendor,
   getVendorProfile,
-  getVendorProducts
+  getVendorProducts,
 };

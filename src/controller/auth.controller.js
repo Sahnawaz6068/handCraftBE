@@ -74,8 +74,8 @@ async function signin(req, res) {
     res.cookie("refreshToken", result.refreshToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 Days
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
     const successResponse = {
@@ -105,8 +105,34 @@ async function signin(req, res) {
     });
   }
 }
+
+async function updateUserDetails(req, res) {
+  try {
+    const updatedUser = await userService.updateUser(req.params.id, req.body);
+    const successResponse = {
+      ...responsebody.successResponseBody,
+    };
+    successResponse.data = updatedUser;
+    successResponse.message = "User updated successfully";
+
+    res.status(StatusCodes.OK).json({
+      successResponse,
+    });
+  } catch (error) {
+    const errorResponse = {
+      ...responsebody.errorResponseBody,
+    };
+
+    errorResponse.message = error.message;
+
+    res.status(StatusCodes.BAD_REQUEST).json({
+      errorResponse,
+    });
+  }
+}
 export default {
   signUp,
   getUserDetails,
   signin,
+  updateUserDetails,
 };

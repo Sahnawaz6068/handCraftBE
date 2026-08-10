@@ -4,9 +4,10 @@
   "description": "Backend for HandCraft. Freelanc Project",
   "main": "index.js",
   "type": "module",
-  "scripts": {
+ "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
