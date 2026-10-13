@@ -50,7 +50,7 @@ async function signIn(data) {
   if (!isPasswordCorrect) {
     throw new Error("Invalid credentials");
   }
-
+console.log(user)
   const accessToken = generateAccessToken({
     id: user._id,
     role: user.role,

@@ -1,28 +1,41 @@
-// // order.service.js
 import OrderRepo from "../repositories/order.repository.js";
-import productRepository from "../repositories/product.repo.js";
-import SubOrderRepo from "../repositories/subOrder.repository.js";
-
+import ProductRepository from "../repositories/product.repo.js";
+import SubOrderRepository from "../repositories/subOrder.repository.js";
 
 async function buyNow(userId, { productId, quantity }, shippingAddress) {
+  const productRepo = new ProductRepository();
+  const subOrderRepo = new SubOrderRepository();
 
- const productRepositorys = new productRepository();
+  // Validate quantity
+  if (!Number.isInteger(quantity) || quantity <= 0) {
+    throw new Error("Quantity must be a positive integer");
+  }
 
-  // Rule 1: product must exist and be active
-  const product = await productRepositorys.read(productId);
-  if (!product || product.status !== "active") {
+  // Find product
+  const product = await productRepo.read(productId);
+
+  // Product must exist
+  if (!product) {
+    throw new Error("Product not found");
+  }
+
+  // Product must be active
+  if (product.status !== "active") {
     throw new Error("Product is not available");
   }
 
-  // Rule 2: stock must be sufficient
+  // Check stock
   if (product.stockQuantity < quantity) {
-    throw new Error(`Only ${product.stockQuantity} unit(s) left in stock`);
+    throw new Error(
+      `Only ${product.stockQuantity} unit(s) left in stock`
+    );
   }
 
+  // Calculate price
   const price = product.discountPrice || product.price;
   const totalAmount = price * quantity;
 
-  // Rule 3: create Order (paymentStatus: created, not paid yet)
+  // Create Order
   const order = await OrderRepo.create({
     userId,
     shippingAddress,
@@ -30,8 +43,8 @@ async function buyNow(userId, { productId, quantity }, shippingAddress) {
     paymentStatus: "pending",
   });
 
-  // Rule 4: single-vendor SubOrder (only one product, one vendor)
-  const [subOrder] = await SubOrderRepo.createMany([
+  // Create SubOrder
+  const [subOrder] = await subOrderRepo.createMany([
     {
       orderId: order._id,
       vendorId: product.vendorId,
@@ -47,24 +60,30 @@ async function buyNow(userId, { productId, quantity }, shippingAddress) {
     },
   ]);
 
+  // Attach SubOrder to Order
   order.subOrders = [subOrder._id];
+
   await order.save();
-
-  // Rule 5: create Razorpay payment session
-//   const razorpayOrder = await razorpay.orders.create({
-//     amount: Math.round(totalAmount * 100), // paise
-//     currency: "INR",
-//     receipt: order._id.toString(),
-//   });
-
-//   order.razorpayOrderId = razorpayOrder.id;
-//   await order.save();
 
   return {
     orderId: order._id,
-    // razorpayOrderId: razorpayOrder.id,
+    subOrderId: subOrder._id,
     amount: totalAmount,
   };
 }
 
-export default { buyNow };
+
+// Get all SubOrders belonging to a vendor
+async function getVendorSubOrders(vendorId) {
+  const subOrderRepo = new SubOrderRepository();
+
+  const subOrders = await subOrderRepo.getSubOrdersByVendorId(vendorId);
+
+  return subOrders;
+}
+
+
+export default {
+  buyNow,
+  getVendorSubOrders,
+};
